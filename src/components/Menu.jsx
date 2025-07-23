@@ -1,10 +1,61 @@
 import React, { useRef, useState } from "react";
 import { allCocktails } from "../constants";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
 
 function Menu() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const totalCocktails = allCocktails.length;
   const contentRef = useRef();
+
+  useGSAP(() => {
+    gsap.fromTo(
+      "#title",
+      {
+        opacity: 0,
+      },
+      { opacity: 1, duration: 1 }
+    );
+
+    gsap.fromTo(
+      ".cocktail img",
+      {
+        opacity: 0,
+        scale: 0.5,
+        y: -200,
+        zIndex: -1,
+      },
+      {
+        opacity: 1,
+        scale: 1,
+        y: 0,
+        duration: 1,
+        zIndex: 1,
+        ease: "power2.out",
+      }
+    );
+
+    gsap.fromTo(
+      ".details h2",
+      { yPercent: 100, opacity: 0 },
+      { yPercent: 0, opacity: 100, ease: "power1.inOut" }
+    );
+
+    gsap.fromTo(
+      ".details p",
+      { yPercent: 100, opacity: 0 },
+      { yPercent: 0, opacity: 1, ease: "power1.inOut" }
+    );
+
+    gsap.from("#m-left-leaf", {
+      x: -100,
+      y: 100,
+    });
+    gsap.from("#m-right-leaf", {
+      x: 100,
+      y: 100,
+    });
+  }, [currentIndex]);
 
   const goToSlide = (index) => {
     const newIndex = (index + totalCocktails) % totalCocktails;
